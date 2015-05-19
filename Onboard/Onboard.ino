@@ -90,7 +90,7 @@ void setupAccessPoint(void) {
   }
   st += "</ol>";
   delay(100);
-  WiFi.mode(WIFI_AP_STA);
+  WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, passphrase, 6);
   launchWeb(ACCESS_POINT_WEBSERVER);
 }
@@ -129,14 +129,17 @@ void handleDisplayAccessPoints() {
   uint8_t mac[6];
   WiFi.macAddress(mac);
   String macStr = macToStr(mac);
-  content = "<!DOCTYPE HTML>\n<html>Hello from ESP8266 at ";
+  content = "<!DOCTYPE HTML>\n<html>Hello from ";
+  content += ssid;
+  content += " at ";
   content += ipStr;
   content += " (";
   content += macStr;
   content += ")";
   content += "<p>";
   content += st;
-  content += "<p><form method='get' action='setap'><label>SSID: </label><input name='ssid' length=32><input name='pass' length=64><input type='submit'></form>";
+  content += "<p><form method='get' action='setap'><label>SSID: </label>";
+  content += "<input name='ssid' length=32><input name='pass' length=64><input type='submit'></form>";
   content += "<p>We will attempt to connect to the selected AP and reset if successful.";
   content += "<p>Wait a bit and try connecting to http://";
   content += ssid;
@@ -220,7 +223,6 @@ void handleNotFound() {
 }
 
 void loop() {
-  mdns.update();
   server.handleClient();	// In this example we're not doing too much
 }
 
